@@ -5,19 +5,22 @@ import io.restassured.response.ValidatableResponse;
 
 import static io.restassured.RestAssured.given;
 
-public class BookStoreObjectApiService {
+public class BookStoreObjectApiClient {
 
     private final RequestSpecifications requestSpecifications;
+    private final BookStoreObject bookStoreObject;
     private ValidatableResponse validatableResponse;
 
-    public BookStoreObjectApiService() {
+    public BookStoreObjectApiClient(BookStoreObject bookStoreObject) {
+        this.bookStoreObject = bookStoreObject;
         requestSpecifications = new RequestSpecifications();
     }
 
-    @Step
-    public <T extends Enum<T> & HasName> ResponseValidator sendPost(BookStoreObject sObject, GenericModel<T> model) {
+    @Step()
+    public ResponseValidator postObject(Object body) {
         validatableResponse = given()
-                .spec(requestSpecifications.createBookStoreObjectSpec(sObject, model))
+                .spec(requestSpecifications.objectsPathSpec(bookStoreObject))
+                .body(body)
                 .when()
                 .post()
                 .then().assertThat();
@@ -25,9 +28,10 @@ public class BookStoreObjectApiService {
     }
 
     @Step
-    public <T extends Enum<T> & HasName> ResponseValidator sendPut(BookStoreObject sObject, String resourceId, GenericModel<T> model) {
+    public ResponseValidator updateObject(int objectId, Object body) {
         validatableResponse = given()
-                .spec(requestSpecifications.updateBookStoreObjectSpec(sObject, resourceId, model))
+                .spec(requestSpecifications.objectPathSpec(bookStoreObject, objectId))
+                .body(body)
                 .when()
                 .put()
                 .then().assertThat();
@@ -35,9 +39,9 @@ public class BookStoreObjectApiService {
     }
 
     @Step
-    public ResponseValidator sendDelete(BookStoreObject sObject, String resourceId) {
+    public ResponseValidator deleteObject(int objectId) {
         validatableResponse = given()
-                .spec(requestSpecifications.bookStoreObject(sObject, resourceId))
+                .spec(requestSpecifications.objectPathSpec(bookStoreObject, objectId))
                 .when()
                 .delete()
                 .then().assertThat();
@@ -45,9 +49,9 @@ public class BookStoreObjectApiService {
     }
 
     @Step
-    public ResponseValidator sendGetObject(BookStoreObject sObject, String id) {
+    public ResponseValidator getObject(int objectId) {
         validatableResponse = given()
-                .spec(requestSpecifications.bookStoreObject(sObject, id))
+                .spec(requestSpecifications.objectPathSpec(bookStoreObject, objectId))
                 .when()
                 .get()
                 .then().assertThat();
@@ -55,13 +59,64 @@ public class BookStoreObjectApiService {
     }
 
     @Step
-    public ResponseValidator sendGetObjects(BookStoreObject sObject, String id) {
+    public ResponseValidator getObjects() {
         validatableResponse = given()
-                .spec(requestSpecifications.bookStoreObjects(sObject))
+                .spec(requestSpecifications.objectsPathSpec(bookStoreObject))
                 .when()
                 .get()
                 .then().assertThat();
         return new ResponseValidator(validatableResponse);
+    }
+
+    public ResponseValidator getObjectsBy(String specialPath) {
+        validatableResponse = given()
+                .spec(requestSpecifications.specialSpec(specialPath))
+                .when()
+                .get()
+                .then().assertThat();
+        return new ResponseValidator(validatableResponse);
+    }
+
+    @Step
+    public ResponseValidator getObjectNegativeCase(int objectId) {
+        validatableResponse = given()
+                .spec(requestSpecifications.objectPathSpec(bookStoreObject, objectId))
+                .when()
+                .get()
+                .then().assertThat();
+        return new ResponseValidator(validatableResponse).validate(ResponseSpecifications.objectNotFoundSpec());
+    }
+
+    @Step
+    public ResponseValidator deleteObjectNegativeCase(int objectId) {
+        validatableResponse = given()
+                .spec(requestSpecifications.objectPathSpec(bookStoreObject, objectId))
+                .when()
+                .delete()
+                .then().assertThat();
+        return new ResponseValidator(validatableResponse).validate(ResponseSpecifications.responseCode404Spec());
+    }
+
+    @Step
+    public ResponseValidator updateObjectNegativeCase(int objectId, Object body) {
+        validatableResponse = given()
+                .spec(requestSpecifications.objectPathSpec(bookStoreObject, objectId))
+                .body(body)
+                .when()
+                .put()
+                .then().assertThat();
+        return new ResponseValidator(validatableResponse).validate(ResponseSpecifications.responseCode404Spec());
+    }
+
+    @Step
+    public ResponseValidator postObjectNegativeCase(Object body) {
+        validatableResponse = given()
+                .spec(requestSpecifications.objectsPathSpec(bookStoreObject))
+                .body(body)
+                .when()
+                .post()
+                .then().assertThat();
+        return new ResponseValidator(validatableResponse).validate(ResponseSpecifications.responseCode404Spec());
     }
 }
 

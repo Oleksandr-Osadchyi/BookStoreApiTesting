@@ -1,7 +1,7 @@
-package authors;
+package books;
 
-import api.authors.Author;
-import api.authors.AuthorsClient;
+import api.books.Book;
+import api.books.BooksClient;
 import api.engine.BookStoreObject;
 import api.engine.BookStoreObjectApiClient;
 import io.qameta.allure.Description;
@@ -16,122 +16,92 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Feature("Update Author")
-public class UpdateAuthorTest extends BaseTest {
+@Feature("Update Book")
+public class UpdateBookTest extends BaseTest {
 
-    AuthorsClient authorsClient = new AuthorsClient();
-    BookStoreObjectApiClient bookStoreObjectApiClient = new BookStoreObjectApiClient(BookStoreObject.AUTHORS);
+    BooksClient booksClient = new BooksClient();
+    BookStoreObjectApiClient bookStoreObjectApiClient = new BookStoreObjectApiClient(BookStoreObject.BOOKS);
 
-    @Description("Update existing author by id")
+    @Description("Update existing Book by id")
     @Test
-    public void updateAuthorTest() {
-        List<Author> authorList = authorsClient.getAuthors();
-        Author randomAuthor = RandomUtil.getRandomItem(authorList);
+    public void updateBookTest() {
+        List<Book> bookList = booksClient.getBooks();
+        Book randomBook = RandomUtil.getRandomItem(bookList);
 
-        Author updateAuthorModel = new Author().createRandomAuthorModel();
-        authorsClient.updateAuthor(randomAuthor.getId(), updateAuthorModel);
+        Book updateBookModel = new Book().createRandomBookModel();
+        booksClient.updateBook(randomBook.getId(), updateBookModel);
 
-        List<Author> authorListByOldId = authorsClient.getAuthors()
+        List<Book> bookListByOldId = booksClient.getBooks()
                 .stream()
-                .filter(author -> author.getId() == randomAuthor.getId()).collect(Collectors.toList());
-        softly.assertThat(authorListByOldId)
+                .filter(book -> book.getId() == randomBook.getId()).collect(Collectors.toList());
+        softly.assertThat(bookListByOldId)
                 .withFailMessage(StringUtil.buildString(
                         Arrays.asList(
-                                "old author " + randomAuthor,
-                                "was found in list of authors from get /api/v1/Authors api result",
+                                "old Book " + randomBook,
+                                "was found in list of Books from get /api/v1/Books api result",
                                 "by old id after update"
                         ),
                         "\n"
                 ))
                 .isEmpty();
 
-        List<Author> authorListByOldBookId = authorsClient.getAuthorsByBookId(randomAuthor.getIdBook())
-                .stream()
-                .filter(author -> author.getId() == randomAuthor.getId()).collect(Collectors.toList());
-        softly.assertThat(authorListByOldBookId)
-                .withFailMessage(StringUtil.buildString(
-                        Arrays.asList(
-                                "old author " + randomAuthor,
-                                "was found in list of authors from get /api/v1/Authors/authors/books/{idBook}",
-                                "by old id after update"
-                        ),
-                        "\n"
-                ))
-                .isEmpty();
 
-        List<Author> authorListByUpdatedId = authorsClient.getAuthors()
+        List<Book> bookListByUpdatedId = booksClient.getBooks()
                 .stream()
-                .filter(author -> author.getId() == updateAuthorModel.getId()).collect(Collectors.toList());
-        softly.assertThat(authorListByUpdatedId)
+                .filter(Book -> Book.getId() == updateBookModel.getId()).collect(Collectors.toList());
+        softly.assertThat(bookListByUpdatedId)
                 .withFailMessage(StringUtil.buildString(
                         Arrays.asList(
-                                "updated author " + updateAuthorModel,
-                                "was not found in list of authors from get /api/v1/Authors api result",
+                                "updated Book " + updateBookModel,
+                                "was not found in list of Books from get /api/v1/Books api result",
                                 "by new id after update"
                         ),
                         "\n"
                 ))
                 .isNotEmpty();
 
-        if (!authorListByUpdatedId.isEmpty()) {
-            softly.assertThat(authorListByUpdatedId.stream().findFirst().get())
-                    .isEqualTo(updateAuthorModel);
-        }
-
-        List<Author> authorListByUpdatedBookId = authorsClient.getAuthorsByBookId(randomAuthor.getIdBook())
-                .stream()
-                .filter(author -> author.getId() == updateAuthorModel.getId()).collect(Collectors.toList());
-        softly.assertThat(authorListByUpdatedBookId)
-                .withFailMessage(StringUtil.buildString(
-                        Arrays.asList(
-                                "updated author " + randomAuthor,
-                                "was not found in list of authors from get /api/v1/Authors/authors/books/{idBook}",
-                                "by new id after update"
-                        ),
-                        "\n"
-                ))
-                .isNotEmpty();
-        if (!authorListByUpdatedBookId.isEmpty()) {
-            softly.assertThat(authorListByUpdatedBookId.stream().findFirst().get())
-                    .isEqualTo(updateAuthorModel);
+        if (!bookListByUpdatedId.isEmpty()) {
+            softly.assertThat(bookListByUpdatedId.stream().findFirst().get())
+                    .isEqualTo(updateBookModel);
         }
         softly.assertAll();
     }
 
-    @Description("Update author by not exising id")
+    @Description("Update Book by not exising id")
     @Test
-    public void updateAuthorByNotExistingIdTest() {
+    public void updateBookByNotExistingIdTest() {
         bookStoreObjectApiClient
-                .updateObjectNegativeCase(FakerUtil.nonExistingEntityId(), new Author().createRandomAuthorModel());
+                .updateObjectNegativeCase(FakerUtil.nonExistingEntityId(), new Book().createRandomBookModel());
     }
 
-    @Description("Update author with nullable fields")
+    @Description("Update Book with nullable fields")
     @Test
-    public void updateAuthorWithNullableFieldsTest() {
-        List<Author> authorList = authorsClient.getAuthors();
-        Author randomAuthor = RandomUtil.getRandomItem(authorList);
+    public void updateBookWithNullableFieldsTest() {
+        List<Book> BookList = booksClient.getBooks();
+        Book randomBook = RandomUtil.getRandomItem(BookList);
+        randomBook.setTitle(null);
+        randomBook.setDescription(null);
+        randomBook.setExcerpt(null);
+        booksClient.updateBook(randomBook.getId(), randomBook);
 
-        randomAuthor.setFirstName(null);
-        randomAuthor.setLastName(null);
-        authorsClient.updateAuthor(randomAuthor.getId(), randomAuthor);
-
-        Author authorById = authorsClient.getAuthor(randomAuthor.getId());
-        softly.assertThat(authorById)
-                .isEqualTo(randomAuthor);
+        Book bookById = booksClient.getBook(randomBook.getId());
+        softly.assertThat(bookById)
+                .isEqualTo(randomBook);
         softly.assertAll();
     }
 
-    @Description("Update author with not nullable fields")
+    @Description("Update Book with not nullable fields")
     @Test
-    public void updateAuthorWithNotNullableFieldsTest() {
-        List<Author> authorList = authorsClient.getAuthors();
-        Author randomAuthor = RandomUtil.getRandomItem(authorList);
+    public void updateBookWithNotNullableFieldsTest() {
+        List<Book> BookList = booksClient.getBooks();
+        Book randomBook = RandomUtil.getRandomItem(BookList);
 
-        Author updateAuthorModelWithoutMandatoryFields = Author.builder()
-                .firstName(FakerUtil.randomFirstName())
-                .lastName(FakerUtil.randomLastName())
+        Book updateBookModelWithoutMandatoryFields = Book.builder()
+                .title(FakerUtil.randomTitle())
+                .description(FakerUtil.randomSentence())
+                .excerpt(FakerUtil.randomSentence())
                 .build();
         bookStoreObjectApiClient
-                .updateObjectNegativeCase(randomAuthor.getId(), updateAuthorModelWithoutMandatoryFields);
+                .updateObjectNegativeCase(randomBook.getId(), updateBookModelWithoutMandatoryFields);
     }
 }

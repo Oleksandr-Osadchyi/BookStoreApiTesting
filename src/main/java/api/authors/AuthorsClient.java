@@ -1,4 +1,4 @@
-package api.author;
+package api.authors;
 
 import api.engine.BookStoreObject;
 import api.engine.BookStoreObjectApiClient;
@@ -6,7 +6,7 @@ import api.engine.ResponseSpecifications;
 
 import java.util.List;
 
-public class AuthorClient {
+public class AuthorsClient {
 
     private static final BookStoreObjectApiClient bookStoreObjectApiService
             = new BookStoreObjectApiClient(BookStoreObject.AUTHORS);
@@ -25,7 +25,7 @@ public class AuthorClient {
                 .getRecords(Author.class);
     }
 
-    public List<Author> getAuthorsByBookId(String bookId) {
+    public List<Author> getAuthorsByBookId(int bookId) {
         return bookStoreObjectApiService
                 .getObjectsBy("/Authors/authors/books/" + bookId)
                 .validate(ResponseSpecifications.responseCode200Spec())

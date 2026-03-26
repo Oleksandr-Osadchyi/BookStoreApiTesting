@@ -1,7 +1,7 @@
-package authors;
+package books;
 
-import api.authors.Author;
-import api.authors.AuthorsClient;
+import api.books.Book;
+import api.books.BooksClient;
 import api.engine.BookStoreObject;
 import api.engine.BookStoreObjectApiClient;
 import io.qameta.allure.Description;
@@ -13,58 +13,60 @@ import utils.RandomUtil;
 
 import java.util.List;
 
-@Feature("Create Author")
-public class CreateAuthorTest extends BaseTest {
+@Feature("Create Book")
+public class CreateBookTest extends BaseTest {
 
-    AuthorsClient authorsClient = new AuthorsClient();
-    BookStoreObjectApiClient bookStoreObjectApiClient = new BookStoreObjectApiClient(BookStoreObject.AUTHORS);
+    BooksClient booksClient = new BooksClient();
+    BookStoreObjectApiClient bookStoreObjectApiClient = new BookStoreObjectApiClient(BookStoreObject.BOOKS);
 
-    @Description("Create author")
+    @Description("Create book")
     @Test
-    public void createAuthorTest() {
-        Author createAuthorModel = new Author().createRandomAuthorModel();
-        authorsClient.createAuthor(createAuthorModel);
+    public void createBookTest() {
+        Book createBookModel = new Book().createRandomBookModel();
+        booksClient.createBook(createBookModel);
 
-        Author authorById = authorsClient.getAuthor(createAuthorModel.getId());
-        softly.assertThat(authorById)
-                .isEqualTo(createAuthorModel);
+        Book BookById = booksClient.getBook(createBookModel.getId());
+        softly.assertThat(BookById)
+                .isEqualTo(createBookModel);
         softly.assertAll();
     }
 
-    @Description("Create author with nullable fields")
+    @Description("Create Book with nullable fields")
     @Test
-    public void createAuthorWithNullableFieldsTest() {
-        Author newAuthor = new Author().createRandomAuthorModel();
-        newAuthor.setFirstName(null);
-        newAuthor.setLastName(null);
-        authorsClient.createAuthor(newAuthor);
+    public void createBookWithNullableFieldsTest() {
+        Book newBook = new Book().createRandomBookModel();
+        newBook.setTitle(null);
+        newBook.setDescription(null);
+        newBook.setExcerpt(null);
+        booksClient.createBook(newBook);
 
-        Author authorById = authorsClient.getAuthor(newAuthor.getId());
-        softly.assertThat(authorById)
-                .isEqualTo(newAuthor);
+        Book BookById = booksClient.getBook(newBook.getId());
+        softly.assertThat(BookById)
+                .isEqualTo(newBook);
         softly.assertAll();
     }
 
-    @Description("Create author with already existing id")
+    @Description("Create Book with already existing id")
     @Test
-    public void createAuthorWithAlreadyExistingIdTest() {
-        List<Author> authorList = authorsClient.getAuthors();
-        Author randomAuthor = RandomUtil.getRandomItem(authorList);
+    public void createBookWithAlreadyExistingIdTest() {
+        List<Book> BookList = booksClient.getBooks();
+        Book randomBook = RandomUtil.getRandomItem(BookList);
 
-        Author createAuthorModel = new Author().createRandomAuthorModel();
-        createAuthorModel.setId(randomAuthor.getId());
+        Book createBookModel = new Book().createRandomBookModel();
+        createBookModel.setId(randomBook.getId());
         bookStoreObjectApiClient
-                .postObjectNegativeCase(createAuthorModel);
+                .postObjectNegativeCase(createBookModel);
     }
 
-    @Description("Create author with not nullable fields")
+    @Description("Create Book with not nullable fields")
     @Test
-    public void createAuthorWithNotNullableFieldsTest() {
-        Author updateAuthorModelWithoutMandatoryFields = Author.builder()
-                .firstName(FakerUtil.randomFirstName())
-                .lastName(FakerUtil.randomLastName())
+    public void createBookWithNotNullableFieldsTest() {
+        Book updateBookModelWithoutMandatoryFields = Book.builder()
+                .title(FakerUtil.randomTitle())
+                .description(FakerUtil.randomSentence())
+                .excerpt(FakerUtil.randomSentence())
                 .build();
         bookStoreObjectApiClient
-                .postObjectNegativeCase(updateAuthorModelWithoutMandatoryFields);
+                .postObjectNegativeCase(updateBookModelWithoutMandatoryFields);
     }
 }

@@ -1,4 +1,5 @@
-package api.authors;
+package api.coverPhotos;
+
 
 import api.engine.BookStoreObject;
 import api.engine.BookStoreObjectApiClient;
@@ -6,48 +7,48 @@ import api.engine.ResponseSpecifications;
 
 import java.util.List;
 
-public class AuthorsClient {
+public class CoverPhotosClient {
 
     private static final BookStoreObjectApiClient bookStoreObjectApiService
-            = new BookStoreObjectApiClient(BookStoreObject.AUTHORS);
+            = new BookStoreObjectApiClient(BookStoreObject.COVER_PHOTOS);
 
-    public Author createAuthor(Author author) {
+    public CoverPhoto createCoverPhoto(CoverPhoto coverPhoto) {
         return bookStoreObjectApiService
-                .postObject(author)
+                .postObject(coverPhoto)
                 .validate(ResponseSpecifications.responseCode200Spec())
-                .getRecord(Author.class);
+                .getRecord(CoverPhoto.class);
     }
 
-    public List<Author> getAuthors() {
+    public List<CoverPhoto> getCoverPhotos() {
         return bookStoreObjectApiService
                 .getObjects()
                 .validate(ResponseSpecifications.responseCode200Spec())
-                .getRecords(Author.class);
+                .getRecords(CoverPhoto.class);
     }
 
-    public List<Author> getAuthorsByBookId(String bookId) {
+    public List<CoverPhoto> getCoverPhotosByBookId(String bookId) {
         return bookStoreObjectApiService
-                .getObjectsBy("/Authors/authors/books/" + bookId)
+                .getObjectsBy("/CoverPhotos/books/covers/" + bookId)
                 .validate(ResponseSpecifications.responseCode200Spec())
-                .getRecords(Author.class);
+                .getRecords(CoverPhoto.class);
     }
 
-    public Author getAuthor(int authorId) {
+    public CoverPhoto getCoverPhoto(int coverPhotoId) {
         return bookStoreObjectApiService
-                .getObject(authorId)
+                .getObject(coverPhotoId)
                 .validate(ResponseSpecifications.responseCode200Spec())
-                .getRecord(Author.class);
+                .getRecord(CoverPhoto.class);
     }
 
-    public void updateAuthor(int authorId, Author author) {
+    public void updateCoverPhoto(int coverPhotoId, CoverPhoto coverPhoto) {
         bookStoreObjectApiService
-                .updateObject(authorId, author)
+                .updateObject(coverPhotoId, coverPhoto)
                 .validate(ResponseSpecifications.responseCode200Spec());
     }
 
-    public void deleteAuthor(int authorId) {
+    public void deleteCoverPhoto(int coverPhotoId) {
         bookStoreObjectApiService
-                .deleteObject(authorId)
+                .deleteObject(coverPhotoId)
                 .validate(ResponseSpecifications.responseCode200Spec());
     }
 }

@@ -1,35 +1,32 @@
-package api.authors;
+package api.coverPhotos;
 
 import lombok.*;
 import utils.FakerUtil;
+
 
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-//@JsonInclude(JsonInclude.Include.NON_NULL)
-public class Author {
+public class CoverPhoto {
     private int id;
     private int idBook;
-    private String firstName;
-    private String lastName;
+    private String url;
 
-    public Author createAuthorModel(int authorId,int bookId, String firstName, String lastName) {
-        return Author.builder()
-                .id(authorId)
+    public CoverPhoto createCoverPhotoModel(int coverPhotoId, int bookId, String url) {
+        return CoverPhoto.builder()
+                .id(coverPhotoId)
                 .idBook(bookId)
-                .firstName(firstName)
-                .lastName(lastName)
+                .url(url)
                 .build();
-    };
+    }
 
-    public Author createRandomAuthorModel() {
-        return Author.builder()
+    public CoverPhoto createRandomCoverPhotoModel() {
+        return CoverPhoto.builder()
                 .id(FakerUtil.randomNumber(1000, 100000))
                 .idBook(FakerUtil.randomNumber(1000, 100000))
-                .firstName(FakerUtil.randomFirstName())
-                .lastName(FakerUtil.randomLastName())
+                .url(FakerUtil.randomUrl())
                 .build();
     }
 }

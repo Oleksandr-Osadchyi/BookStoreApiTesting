@@ -1,4 +1,4 @@
-package api.authors;
+package api.activities;
 
 import api.engine.BookStoreObject;
 import api.engine.BookStoreObjectApiClient;
@@ -6,48 +6,41 @@ import api.engine.ResponseSpecifications;
 
 import java.util.List;
 
-public class AuthorsClient {
+public class ActivitiesClient {
 
     private static final BookStoreObjectApiClient bookStoreObjectApiService
-            = new BookStoreObjectApiClient(BookStoreObject.AUTHORS);
+            = new BookStoreObjectApiClient(BookStoreObject.ACTIVITIES);
 
-    public Author createAuthor(Author author) {
+    public Activity createActivity(Activity activity) {
         return bookStoreObjectApiService
-                .postObject(author)
+                .postObject(activity)
                 .validate(ResponseSpecifications.responseCode200Spec())
-                .getRecord(Author.class);
+                .getRecord(Activity.class);
     }
 
-    public List<Author> getAuthors() {
+    public List<Activity> getActivities() {
         return bookStoreObjectApiService
                 .getObjects()
                 .validate(ResponseSpecifications.responseCode200Spec())
-                .getRecords(Author.class);
+                .getRecords(Activity.class);
     }
 
-    public List<Author> getAuthorsByBookId(String bookId) {
+    public Activity getActivity(int activityId) {
         return bookStoreObjectApiService
-                .getObjectsBy("/Authors/authors/books/" + bookId)
+                .getObject(activityId)
                 .validate(ResponseSpecifications.responseCode200Spec())
-                .getRecords(Author.class);
+                .getRecord(Activity.class);
     }
 
-    public Author getAuthor(int authorId) {
-        return bookStoreObjectApiService
-                .getObject(authorId)
-                .validate(ResponseSpecifications.responseCode200Spec())
-                .getRecord(Author.class);
-    }
-
-    public void updateAuthor(int authorId, Author author) {
+    public void updateActivity(int activityId, Activity activity) {
         bookStoreObjectApiService
-                .updateObject(authorId, author)
+                .updateObject(activityId, activity)
                 .validate(ResponseSpecifications.responseCode200Spec());
     }
 
-    public void deleteAuthor(int authorId) {
+    public void deleteActivity(int activityId) {
         bookStoreObjectApiService
-                .deleteObject(authorId)
+                .deleteObject(activityId)
                 .validate(ResponseSpecifications.responseCode200Spec());
     }
 }

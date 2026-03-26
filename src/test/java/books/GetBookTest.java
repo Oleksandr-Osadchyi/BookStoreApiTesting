@@ -1,7 +1,7 @@
-package authors;
+package books;
 
-import api.authors.Author;
-import api.authors.AuthorsClient;
+import api.books.Book;
+import api.books.BooksClient;
 import api.engine.BookStoreObject;
 import api.engine.BookStoreObjectApiClient;
 import io.qameta.allure.Description;
@@ -13,27 +13,27 @@ import utils.RandomUtil;
 
 import java.util.List;
 
-@Feature("Get Author")
-public class GetAuthorTest extends BaseTest {
+@Feature("Get Book")
+public class GetBookTest extends BaseTest {
 
-    AuthorsClient authorsClient = new AuthorsClient();
+    BooksClient booksClient = new BooksClient();
 
-    @Description("Get existing author by id")
+    @Description("Get existing book by id")
     @Test
-    public void getAuthorByIdTest() {
-        List<Author> authorList = authorsClient.getAuthors();
-        Author randomAuthor = RandomUtil.getRandomItem(authorList);
-        Author authorById = authorsClient.getAuthor(randomAuthor.getId());
+    public void getBookByIdTest() {
+        List<Book> bookList = booksClient.getBooks();
+        Book randomBook = RandomUtil.getRandomItem(bookList);
+        Book bookById = booksClient.getBook(randomBook.getId());
 
-        softly.assertThat(randomAuthor) // a good assertion message is already built in for this case
-                .isEqualTo(authorById);
+        softly.assertThat(randomBook) // a good assertion message is already built in for this case
+                .isEqualTo(bookById);
         softly.assertAll();
     }
 
-    @Description("Get author by not existing id")
+    @Description("Get book by not existing id")
     @Test
-    public void getAuthorByNotExistingIdTest() {
-        new BookStoreObjectApiClient(BookStoreObject.AUTHORS)
+    public void getBookByNotExistingIdTest() {
+        new BookStoreObjectApiClient(BookStoreObject.BOOKS)
                 .getObjectNegativeCase(FakerUtil.nonExistingEntityId());
     }
 }

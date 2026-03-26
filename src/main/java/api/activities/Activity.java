@@ -1,35 +1,37 @@
-package api.authors;
+package api.activities;
 
 import lombok.*;
+import utils.DateTimeUtil;
 import utils.FakerUtil;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-//@JsonInclude(JsonInclude.Include.NON_NULL)
-public class Author {
+public class Activity {
     private int id;
-    private int idBook;
-    private String firstName;
-    private String lastName;
+    private String title;
+    private String dueDate;
+    private boolean completed;
 
-    public Author createAuthorModel(int authorId,int bookId, String firstName, String lastName) {
-        return Author.builder()
-                .id(authorId)
-                .idBook(bookId)
-                .firstName(firstName)
-                .lastName(lastName)
+    public Activity createActivityModel(int id, String title, String dueDate, boolean completed) {
+        return Activity.builder()
+                .id(id)
+                .title(title)
+                .dueDate(dueDate)
+                .completed(completed)
                 .build();
-    };
+    }
 
-    public Author createRandomAuthorModel() {
-        return Author.builder()
+    public Activity createRandomActivityModel() {
+        return Activity.builder()
                 .id(FakerUtil.randomNumber(1000, 100000))
-                .idBook(FakerUtil.randomNumber(1000, 100000))
-                .firstName(FakerUtil.randomFirstName())
-                .lastName(FakerUtil.randomLastName())
+                .title(FakerUtil.randomTitle())
+                .dueDate(DateTimeUtil.formatDateToString(LocalDateTime.now(), DateTimeUtil.FULL_ZONED_UTC_DATE_TIME_FORMAT))
+                .completed(FakerUtil.randomBoolean())
                 .build();
     }
 }

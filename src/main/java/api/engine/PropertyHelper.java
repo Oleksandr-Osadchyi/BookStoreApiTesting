@@ -1,4 +1,4 @@
-package testengine;
+package api.engine;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,7 +12,7 @@ import java.util.Properties;
 
 public class PropertyHelper {
 
-    private static String propertiesPath = "src/test/testengine/test.properties";
+    private final static String DEFAULT_PROPERTIES_PATH = "src/main/java/api/engine/api.properties";
 
     public static void writeDataToPropertyFile(Map<String, String> map) {
         try {
@@ -22,21 +22,21 @@ public class PropertyHelper {
                 properties.setProperty(key, map.get(key));
             }
 
-            File file = new File("test.properties");
+            File file = new File(DEFAULT_PROPERTIES_PATH);
             FileOutputStream fileOut = new FileOutputStream(file);
-            properties.store(fileOut, "Manage test properties");
+            properties.store(fileOut, "Manage properties");
             fileOut.close();
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
-    public static String readFromPropertyFile(String fileName, String key) {
+    public static String readFromPropertyFile(String key) {
         Properties prop = new Properties();
         InputStream input = null;
 
         try {
-            input = Files.newInputStream(Paths.get("test.properties"));
+            input = Files.newInputStream(Paths.get(DEFAULT_PROPERTIES_PATH));
             prop.load(input);
             if(prop.containsKey(key)) {
                 return prop.getProperty(key);

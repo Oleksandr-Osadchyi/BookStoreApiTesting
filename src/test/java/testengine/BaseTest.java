@@ -1,14 +1,12 @@
-import api.authors.AuthorsClient;
-import api.engine.BookStoreObjectApiClient;
+package testengine;
+
 import org.assertj.core.api.SoftAssertions;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
+
 import org.testng.asserts.SoftAssert;
 
 public abstract class BaseTest {
-
-    public static BookStoreObjectApiClient bookStoreObjectApiService;
-    public static AuthorsClient authorsClient;
 
     // AssertJ soft assert
     public SoftAssertions softly;
@@ -18,12 +16,14 @@ public abstract class BaseTest {
 
     @BeforeClass(alwaysRun = true)
     public void beforeActions() {
-        authorsClient = new AuthorsClient();
-    }
-
-    @BeforeMethod(alwaysRun = true)
-    public void beforeMethod() {
         soft = new SoftAssert();
         softly = new SoftAssertions();
     }
+
+    @AfterSuite(alwaysRun = true)
+    public void afterActions() {
+        //new ReportGenerator(ConfigurationBuilder.bundled().build()).generate(destination, source)
+    }
+
+
 }

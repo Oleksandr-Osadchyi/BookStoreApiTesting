@@ -1,4 +1,4 @@
-package api.book;
+package api.books;
 
 import api.engine.BookStoreObject;
 import api.engine.BookStoreObjectApiClient;
@@ -6,7 +6,7 @@ import api.engine.ResponseSpecifications;
 
 import java.util.List;
 
-public class BookClient {
+public class BooksClient {
 
     private static final BookStoreObjectApiClient bookStoreObjectApiService = new BookStoreObjectApiClient(BookStoreObject.BOOKS);
     

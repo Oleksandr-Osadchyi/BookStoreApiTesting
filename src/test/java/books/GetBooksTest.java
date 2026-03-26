@@ -1,8 +1,8 @@
-package authors;
+package books;
 
 
-import api.authors.Author;
-import api.authors.AuthorsClient;
+import api.books.Book;
+import api.books.BooksClient;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import org.testng.annotations.Test;
@@ -10,23 +10,26 @@ import testengine.BaseTest;
 
 import java.util.List;
 
-public class GetAuthorsTest extends BaseTest {
+public class GetBooksTest extends BaseTest {
 
-    @Feature("Get Authors")
-    @Description("Check Authors getting test")
+    @Feature("Get Books")
+    @Description("Check Books getting test")
     @Test
-    public void checkBooksGetTest() {
-        AuthorsClient authorsClient = new AuthorsClient();
-        List<Author> authorList = authorsClient.getAuthors();
+    public void checkGetBooksTest() {
+        BooksClient booksClient = new BooksClient();
+        List<Book> bookList = booksClient.getBooks();
 
-        softly.assertThat(authorList)
-                .withFailMessage("authors list is empty")
+        softly.assertThat(bookList)
+                .withFailMessage("books list is empty")
                 .isNotEmpty();
-        authorList.forEach(author -> softly.assertThat(author.getId())
+        bookList.forEach(author -> softly.assertThat(author.getId())
                 .withFailMessage(author + " has null value for mandatory field id")
                 .isNotNull());
-        authorList.forEach(author -> softly.assertThat(author.getIdBook())
-                .withFailMessage(author + " has null value for mandatory field idBook")
+        bookList.forEach(author -> softly.assertThat(author.getPageCount())
+                .withFailMessage(author + " has null value for mandatory field pageCount")
+                .isNotNull());
+        bookList.forEach(author -> softly.assertThat(author.getPublishDate())
+                .withFailMessage(author + " has null value for mandatory field publishDate")
                 .isNotNull());
         softly.assertAll();
     }

@@ -1,7 +1,8 @@
-package authors;
+package books;
 
-import api.authors.Author;
-import api.authors.AuthorsClient;
+
+import api.books.Book;
+import api.books.BooksClient;
 import api.engine.BookStoreObject;
 import api.engine.BookStoreObjectApiClient;
 import io.qameta.allure.Description;
@@ -16,40 +17,27 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Feature("Delete Author")
-public class DeleteAuthorTest extends BaseTest {
+@Feature("Delete Book")
+public class DeleteBookTest extends BaseTest {
 
-    AuthorsClient authorsClient = new AuthorsClient();
+    BooksClient booksClient = new BooksClient();
 
-    @Description("Delete existing author by id")
+    @Description("Delete existing book by id")
     @Test
-    public void deleteAuthorTest() {
-        List<Author> authorList = authorsClient.getAuthors();
-        Author randomAuthor = RandomUtil.getRandomItem(authorList);
+    public void deleteBooksTest() {
+        List<Book> booksList = booksClient.getBooks();
+        Book randomBook = RandomUtil.getRandomItem(booksList);
 
-        authorsClient.deleteAuthor(randomAuthor.getId());
+        booksClient.deleteBook(randomBook.getId());
 
-        List<Author> authorListById = authorsClient.getAuthors()
+        List<Book> bookListById = booksClient.getBooks()
                 .stream()
-                .filter(author -> author.getId() == randomAuthor.getId()).collect(Collectors.toList());
-        softly.assertThat(authorListById)
+                .filter(Book -> Book.getId() == randomBook.getId()).collect(Collectors.toList());
+        softly.assertThat(bookListById)
                 .withFailMessage(StringUtil.buildString(
                         Arrays.asList(
-                                "deleted author" + randomAuthor,
-                                "was found in list of authors from get /api/v1/Authors api result"
-                        ),
-                        "\n"
-                ))
-                .isEmpty();
-
-        List<Author> authorListByBookId = authorsClient.getAuthorsByBookId(randomAuthor.getIdBook())
-                .stream()
-                .filter(author -> author.getId() == randomAuthor.getId()).collect(Collectors.toList());
-        softly.assertThat(authorListByBookId)
-                .withFailMessage(StringUtil.buildString(
-                        Arrays.asList(
-                                "deleted author" + randomAuthor,
-                                "was found in list of authors from get /api/v1/Authors/authors/books/{idBook} api result"
+                                "deleted Book" + randomBook,
+                                "was found in list of Books from get /api/v1/Books api result"
                         ),
                         "\n"
                 ))
@@ -57,10 +45,10 @@ public class DeleteAuthorTest extends BaseTest {
         softly.assertAll();
     }
 
-    @Description("Delete author by not exising id")
+    @Description("Delete book by not exising id")
     @Test
-    public void deleteAuthorByNotExistingTest() {
-        new BookStoreObjectApiClient(BookStoreObject.AUTHORS)
+    public void deleteBookByNotExistingTest() {
+        new BookStoreObjectApiClient(BookStoreObject.BOOKS)
                 .deleteObjectNegativeCase(FakerUtil.nonExistingEntityId());
     }
 }
