@@ -29,4 +29,11 @@ public class ResponseSpecifications {
                 .expectStatusCode(StatusCodes.STATUS_CODE_404)
                 .build();
     }
+
+    @Step
+    public static ResponseSpecification responseCode400Spec() {
+        return new ResponseSpecBuilder()
+                .expectStatusCode(StatusCodes.STATUS_CODE_400)
+                .build();
+    }
 }

@@ -105,7 +105,7 @@ public class BookStoreObjectApiClient {
                 .when()
                 .put()
                 .then().assertThat();
-        return new ResponseValidator(validatableResponse).validate(ResponseSpecifications.responseCode404Spec());
+        return new ResponseValidator(validatableResponse).validate(ResponseSpecifications.responseCode400Spec());
     }
 
     @Step
@@ -116,7 +116,7 @@ public class BookStoreObjectApiClient {
                 .when()
                 .post()
                 .then().assertThat();
-        return new ResponseValidator(validatableResponse).validate(ResponseSpecifications.responseCode404Spec());
+        return new ResponseValidator(validatableResponse).validate(ResponseSpecifications.responseCode400Spec());
     }
 }
 
